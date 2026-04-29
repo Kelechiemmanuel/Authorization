@@ -71,8 +71,10 @@ app.post('/messages', authToken, async (req, res) => {
             error: "Fail to send message"
         });
     };
-    
+
 });
+
+
 
 app.post('/register', async (req, res) => {
     const { sender_name, email, password } = req.body;
