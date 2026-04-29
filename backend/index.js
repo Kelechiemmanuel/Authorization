@@ -74,6 +74,8 @@ app.post('/messages', authToken, async (req, res) => {
 
 });
 
+
+
 app.post('/register', async (req, res) => {
     const { sender_name, email, password } = req.body;
     if (!sender_name || !email || !password) {
