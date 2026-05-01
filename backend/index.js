@@ -11,8 +11,9 @@ app.use(express.json());
 
 const authToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
+    // console.log("AUTH HEADER:", req.headers.authorization);
 
-    if (!authHeader) {
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(400).json({
             error: "No token provided"
         });
@@ -127,6 +128,39 @@ app.post('/login', async (req, res) => {
             error: "Server error"
         });
     };
+});
+
+app.post('/post', authToken, async (req, res) => {
+    const { title, content } = req.body;
+    try {
+        const result = await pool.query("INSERT INTO posts (title, content, author_id) VALUES ($1, $2, $3) RETURNING * ", [title, content, req.user.id]);
+        return res.status(200).json({
+            message: "Post created successfully",
+            post: result.rows[0]
+        })
+
+    } catch (error) {
+        console.error("POST ERROR", error.message);
+        res.status(400).json({
+            error: "Fail to post blog"
+        });
+    };
+});
+
+app.get('/post', async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT posts.*, users.sender_name AS author_name
+             FROM posts
+             JOIN users ON posts.author_id = users.id`
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error("POST ERROR", error.message);
+        res.status(500).json({
+            error: "Failed to fetch posts"
+        });
+    }
 });
 
 const PORT = process.env.PORT || 3999;
