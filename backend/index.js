@@ -18,7 +18,7 @@ const authToken = (req, res, next) => {
         });
     }
     const token = authHeader.split(" ")[1];
-    
+
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         req.user = decoded;
@@ -28,7 +28,7 @@ const authToken = (req, res, next) => {
         res.status(400).json({
             error: "Invalid token"
         });
-    }
+    };
 
 };
 
@@ -43,50 +43,52 @@ app.get('/', (req, res) => {
     res.send("Hello from backend!");
 });
 
-app.get('/messages', authToken, async (req, res) => {
-    const client = await pool.connect();
-    try {
-        const result = await client.query("SELECT * FROM messages");
-        res.json(result.rows)
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            error: "error fetching messages"
-        });
 
-    } finally {
-        client.release();
-    };
+app.get('/post', async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT posts.*, users.name AS name
+             FROM posts
+             JOIN users ON posts.author_id = users.id`
+        );
+        res.json(result.rows);
+    } catch (error) {
+        console.error("POST ERROR", error.message);
+        res.status(500).json({
+            error: "Failed to fetch posts"
+        });
+    }
 });
 
-app.post('/messages', authToken, async (req, res) => {
-    const { sender_name, content, email } = req.body;
-    try {
-        console.log(req.body);
 
-        const result = await pool.query("INSERT INTO messages (sender_name, content, email) VALUES ($1, $2, $3) RETURNING *", [sender_name, content, email]);
-        res.json(result.rows[0]);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            error: "Fail to send message"
-        });
-    };
+// app.post('/post', authToken, async (req, res) => {
+//     const { title, content } = req.body;
+//     try {
+//         const result = await pool.query("INSERT INTO posts (title, content, author_id) VALUES ($1, $2, $3) RETURNING * ", [title, content, req.user.id]);
+//         return res.status(200).json({
+//             message: "Post created successfully",
+//             post: result.rows[0]
+//         })
 
-});
-
+//     } catch (error) {
+//         console.error("POST ERROR", error.message);
+//         res.status(400).json({
+//             error: "Fail to post blog"
+//         });
+//     };
+// });
 
 
 app.post('/register', async (req, res) => {
-    const { sender_name, email, password } = req.body;
-    if (!sender_name || !email || !password) {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
         return res.status(400).json({
             error: "Name, email and password are required"
         });
     }
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const result = await pool.query("INSERT INTO users (sender_name, email, password) VALUES ($1, $2, $3) RETURNING *", [sender_name, email, hashedPassword]);
+        const result = await pool.query("INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING *", [name, email, hashedPassword]);
         res.status(200).json({
             message: "user created successfully",
         })
@@ -115,13 +117,16 @@ app.post('/login', async (req, res) => {
         const token = jwt.sign(
             {
                 id: user.id,
-                sender_name: user.sender_name,
-                email: user.email
+                name: user.name,
+                email: user.email,
+                role: user.role
             },
             process.env.JWT_SECRET,
             { expiresIn: "1d" }
         )
-        res.json({ token });
+        res.json({ token, user });
+        console.log("DB USER:", user);
+console.log("ROLE FROM DB:", user.role);
     } catch (error) {
         console.error("LOGIN ERROR", error.message);
         res.status(500).json({
@@ -130,35 +135,89 @@ app.post('/login', async (req, res) => {
     };
 });
 
-app.post('/post', authToken, async (req, res) => {
-    const { title, content } = req.body;
-    try {
-        const result = await pool.query("INSERT INTO posts (title, content, author_id) VALUES ($1, $2, $3) RETURNING * ", [title, content, req.user.id]);
-        return res.status(200).json({
-            message: "Post created successfully",
-            post: result.rows[0]
-        })
 
+app.get('/profile', authToken, async (req, res) => {
+     console.log("req.user:", req.user);
+    try {
+        const result = await pool.query("SELECT id, name, email, role FROM users WHERE id = $1", [req.user.id]);
+        const user = result.rows[0];
+        if (!user) return res.status(400).json({
+            error: "user not found"
+        });
+        res.json(user);
     } catch (error) {
-        console.error("POST ERROR", error.message);
-        res.status(400).json({
-            error: "Fail to post blog"
+         console.error("PROFILE ERROR:", error.message);
+        res.status(500).json({
+            error: "failed to fetch profile"
+        })
+    }
+})
+
+
+app.put('/profile', authToken, async (req, res) => {
+    const { name, email } = req.body;
+    try {
+        const result = await pool.query("UPDATE users SET name=$1, email=$2 WHERE id=$3 RETURNING id, email, name", [name, email, req.user.id]);
+        res.json({
+            message: "Profile updated successfully",
+            user: result.rows[0]
+        })
+    } catch (error) {
+        console.error("PROFILE UPDATE ERROR:", error.message);
+        res.status(500).json({
+            error: "failed to update profile"
         });
     };
 });
 
-app.get('/post', async (req, res) => {
+
+app.post('/admin', authToken, async (req, res) => {
+    console.log("REQ USER FROM TOKEN:", req.user);
+    if (req.user.role !== 'admin') {
+        console.log("Unauthorized access:", req.user);
+        
+        return res.status(403).json({
+            error: "Access denied"
+        });
+    }
+
+    const { title, content } = req.body;
+
     try {
         const result = await pool.query(
-            `SELECT posts.*, users.sender_name AS author_name
-             FROM posts
-             JOIN users ON posts.author_id = users.id`
+            "INSERT INTO posts (title, content, author_id) VALUES ($1, $2, $3) RETURNING *",
+            [title, content, req.user.id]
         );
-        res.json(result.rows);
+
+        res.status(200).json({
+            message: "Post created successfully",
+            admin: result.rows[0]
+        });
+
     } catch (error) {
-        console.error("POST ERROR", error.message);
+        console.error("ADMIN POST ERROR:", error.message);
         res.status(500).json({
-            error: "Failed to fetch posts"
+            error: "Failed to create post"
+        });
+    };
+});
+
+
+app.delete('/admin/:id', authToken, async (req, res) => {
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({
+            error: "Access denied"
+        });
+    };
+    try {
+        await pool.query("DELETE FROM posts WHERE id = $1", [req.params.id]);
+        res.json({
+            message: "Post deleted successfully"
+        })
+    } catch (error) {
+        console.error("ADMIN DELETE ERROR:", error.message);
+        res.status(500).json({
+            error: "Failed to delete post"
         });
     }
 });
