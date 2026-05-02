@@ -4,6 +4,9 @@ const Pool = require('pg-pool');
 require('dotenv').config();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const cloudinaryLib = require("cloudinary").v2;
+const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const app = express();
 
 app.use(cors());
@@ -31,6 +34,22 @@ const authToken = (req, res, next) => {
     };
 
 };
+
+cloudinaryLib.config({
+    cloud_name: process.env.CLOUD_NAME,
+    api_key: process.env.CLOUD_API_KEY,
+    api_secret: process.env.CLOUD_API_SECRET,
+});
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinaryLib,
+    params: {
+        folder: "blog_images",
+        allowed_formats: ["jpg", "png", "jpeg"],
+    },
+});
+
+const upload = multer({ storage });
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
@@ -126,7 +145,7 @@ app.post('/login', async (req, res) => {
         )
         res.json({ token, user });
         console.log("DB USER:", user);
-console.log("ROLE FROM DB:", user.role);
+        console.log("ROLE FROM DB:", user.role);
     } catch (error) {
         console.error("LOGIN ERROR", error.message);
         res.status(500).json({
@@ -137,7 +156,7 @@ console.log("ROLE FROM DB:", user.role);
 
 
 app.get('/profile', authToken, async (req, res) => {
-     console.log("req.user:", req.user);
+    console.log("req.user:", req.user);
     try {
         const result = await pool.query("SELECT id, name, email, role FROM users WHERE id = $1", [req.user.id]);
         const user = result.rows[0];
@@ -146,7 +165,7 @@ app.get('/profile', authToken, async (req, res) => {
         });
         res.json(user);
     } catch (error) {
-         console.error("PROFILE ERROR:", error.message);
+        console.error("PROFILE ERROR:", error.message);
         res.status(500).json({
             error: "failed to fetch profile"
         })
@@ -171,22 +190,23 @@ app.put('/profile', authToken, async (req, res) => {
 });
 
 
-app.post('/admin', authToken, async (req, res) => {
+app.post('/admin', authToken, upload.single('image'), async (req, res) => {
     console.log("REQ USER FROM TOKEN:", req.user);
+    console.log("FILE:", req.file);
     if (req.user.role !== 'admin') {
         console.log("Unauthorized access:", req.user);
-        
+
         return res.status(403).json({
             error: "Access denied"
         });
     }
 
     const { title, content } = req.body;
-
+     const imageUrl = req.file?.path || "";
     try {
         const result = await pool.query(
-            "INSERT INTO posts (title, content, author_id) VALUES ($1, $2, $3) RETURNING *",
-            [title, content, req.user.id]
+            "INSERT INTO posts (title, content, author_id, image_url) VALUES ($1, $2, $3, $4) RETURNING *",
+            [title, content, req.user.id, imageUrl]
         );
 
         res.status(200).json({
