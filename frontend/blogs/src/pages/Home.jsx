@@ -2,9 +2,11 @@ import React from 'react'
 import API from '../API'
 import Links from '../components/Links'
 import { useState, useEffect } from 'react'
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     API.get("/post")
@@ -30,20 +32,29 @@ const Home = () => {
         <Links />
       </div>
 
-      <div className='grid grid-cols-4 gap-10 place-items-center w-full px-40'>
-        {posts.map((post) => (
-          <div key={post.id}>
-            {post.image_url && (
-              <div className='w-full h-100 overflow-hidden'>
-                <img src={post.image_url} alt={post.title} className='w-full h-full object-cover'/>
-              </div>
-            )}
-            <h2>{post.title}</h2>
-            <p>{post.content}</p>
-            <small>By {post.name}</small>
-          </div>
-        ))}
-      </div>
+<div className='grid grid-cols-4 gap-10 place-items-center w-full px-40'>
+  {posts.map((post) => (
+    <div
+      key={post.id}
+      onClick={() => navigate(`/post/${post.id}`)}
+      className="cursor-pointer hover:scale-105 transition duration-300"
+    >
+      {post.image_url && (
+        <div className='w-full h-64 overflow-hidden'>
+          <img
+            src={post.image_url}
+            alt={post.title}
+            className='w-full h-full object-cover'
+          />
+        </div>
+      )}
+
+      <h2 className="font-bold">{post.title}</h2>
+      <p className="line-clamp-2">{post.content}</p>
+      <small>By {post.name}</small>
+    </div>
+  ))}
+</div>
     </div>
   )
 }
