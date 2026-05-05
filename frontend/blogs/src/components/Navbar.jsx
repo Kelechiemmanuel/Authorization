@@ -1,43 +1,55 @@
-import React from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from "react-router-dom";
+import Sidebar from "./Sidebar";
+import { Link} from "react-router-dom";
+import Home from "../pages/Home";
+import Products from "../pages/Products";
+import Designs from "../pages/Designs";
+import Development from "../pages/Development";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const user = JSON.parse(localStorage.getItem("user"));
+  const location = useLocation();
 
-  const logout = async () => {
-    localStorage.removeItem("user");
-    navigate('/login');
-  }
+  const isDashboard = location.pathname.startsWith("/dashboard");
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
-    <nav className='flex justify-between p-4 px-20 bg-gray-100 items-center'>
-      <Link to="/">Home</Link>
+    <nav className="flex justify-between items-center p-4 shadow fixed w-full bg-white z-10 top-0">
+      <h1
+        className="font-bold text-xl cursor-pointer"
+        onClick={() => navigate("/")}
+      >
+        JETkey
+      </h1>
 
-      <div className='flex gap-4 justify-center items-center'>
-        <Link to="/login" className=''>Login</Link>{" "}
-        <Link to="/register" className='bg-black text-white px-4 text-[16px] py-2 rounded'>Register</Link>
+      <div className='flex justify-center items-center gap-5'>
+        <Link to="/">Home</Link>
+        <Link to="/products">Products</Link>
+        <Link to="/designs">Designs</Link>
+        <Link to="/development">Development</Link>
       </div>
 
-      {/* {user && <Link to="/profile">Profile</Link>}{" "}
+      <div className="flex items-center gap-4">
+        {!isDashboard ? (
 
-  {user?.role === "admin" && (
-    <Link to="/dashboard">Dashboard</Link>
-  )}{" "}
+          <>
+            <button onClick={() => navigate("/login")}>Login</button>
+            <button onClick={() => navigate("/register")}>Register</button>
+          </>
+        ) : (
 
-  {!user ? (
-    <>
-    <div className='flex gap-4 justify-center items-center'>
-      <Link to="/login" className=''>Login</Link>{" "}
-      <Link to="/register" className='bg-black text-white px-4 text-[16px] py-2 rounded'>Register</Link>
-    </div>
-    </>
-  ) : (
-    <button onClick={logout} className='cursor-pointer'>
-      Logout
-    </button>
-  )} */}
+          <>
+            {/* <button onClick={() => navigate("/profile")}>Profile</button> */}
+            <button onClick={logout}>Logout</button>
+          </>
+        )}
+      </div>
     </nav>
-  )
-}
+  );
+};
 
 export default Navbar;

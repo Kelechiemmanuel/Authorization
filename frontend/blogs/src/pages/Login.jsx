@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -20,13 +21,14 @@ const Login = () => {
       }
 
     } catch (err) {
-      alert(err.response?.data?.error);
+      setError(err.response?.data?.error);
     }
   };
 
   return (
-    <div>
+    <div className="p-20">
       <h2>Login</h2>
+      {error && <p className="text-red-600">{error}</p>}
 
       <input
         placeholder="Email"

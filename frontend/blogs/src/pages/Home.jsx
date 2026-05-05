@@ -3,6 +3,7 @@ import API from '../API'
 import Links from '../components/Links'
 import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
+import Subscribe from './Subscribe';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -55,6 +56,8 @@ const Home = () => {
     </div>
   ))}
 </div>
+     <Subscribe />
+
     </div>
   )
 }

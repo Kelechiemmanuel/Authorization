@@ -1,76 +1,165 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import API from "../API";
+import { Link, useNavigate } from "react-router-dom";
+import CreatePost from "./CreatePost";
+import Update from "./Update";
+import Sidebar from "../components/Sidebar";
+import DeletePost from "./DeletePost";
+import Monitoring from "./Monitoring";
+import Profile from "./Profile";
+import NewsLetter from "./NewsLetter";
+import Published from "./Published";
+import Draft from "./Draft";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
+
 
 const Dashboard = () => {
-  const [success, setSuccess] = useState("");
-  const [error, setError] = useState("");
+  const [active, setActive] = useState("create");
+  const [user, setUser] = useState(null);
+  const [engagement, setEngagement] = useState([]);
+  const [stat, setStat] = useState({
+    members: 0,
+    posts: 0,
+    subscriptions: 0,
+  })
+  const COLORS = ["#3b82f6", "#ec4899", "#f59e0b"];
 
-  const [form, setForm] = useState({
-    title: "",
-    content: "",
-  });
+  useEffect(() => {
+    API.get("/stats")
+      .then((res) => setStat({
+        members: Number(res.data.members),
+        posts: Number(res.data.posts),
+        subscriptions: Number(res.data.subscriptions),
+      }))
+      .catch(console.log);
+  }, []);
 
-  const [image, setImage] = useState(null);
+  useEffect(() => {
+    API.get("/profile")
+      .then((res) => setUser(res.data))
+      .catch(console.log);
+  }, []);
 
-  const handlePost = async () => {
-    try {
-      const formData = new FormData();
-      formData.append("title", form.title);
-      formData.append("content", form.content);
-      formData.append("image", image);
+  useEffect(() => {
+    API.get("/engagement")
+      .then((res) => {
+        const formatted = res.data.map(item => ({
+          day: new Date(item.day).toLocaleDateString(),
+          count: Number(item.count),
+        }));
+        setEngagement(formatted);
+      })
+      .catch(console.log);
+  }, []);
 
-      await API.post("/admin", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+  const barData = [
+    { name: "Users", value: stat.members },
+    { name: "Posts", value: stat.posts },
+    { name: "Subscribers", value: stat.subscriptions },
+  ];
 
-      setSuccess("Post created successfully");
-      setError("");
-
-      setForm({ title: "", content: "" });
-      setImage(null);
-
-      setTimeout(() => setSuccess(""), 3000);
-
-    } catch (err) {
-      setError(err.response?.data?.error || "Something went wrong");
-      setSuccess("");
-
-      setTimeout(() => setError(""), 3000);
-    }
-  };
+  const pieData = [
+    { name: "Users", value: stat.members },
+    { name: "Posts", value: stat.posts },
+    { name: "Subscribers", value: stat.subscriptions },
+  ];
 
   return (
-    <div>
-      <h2>Admin Dashboard</h2>
+    <div className="flex">
+      <Sidebar setActive={setActive} />
+      <div className="flex-1 ml-60 bg-gray-100 min-h-screen p-5 pt-10 mt-10">
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>{success}</p>}
+        <div className="flex items-center justify-between w-full bg-blue-600 text-white p-10 rounded-sm">
+          <div>
+            <h2>Admin Dashboard</h2>
+            <h1 className="text-3xl">Welcome back, {user?.name}</h1>
+            <p>Manage your content and settings here</p>
+          </div>
 
-      <input
-        placeholder="Title"
-        value={form.title}
-        onChange={(e) =>
-          setForm({ ...form, title: e.target.value })
-        }
-      />
+          <div className="flex gap-5">
+            <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("create")}>
+              + Create Post
+            </button>
+            <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("update")}>
+              Update Post
+            </button>
+            <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("delete")}>
+              Delete Post
+            </button>
+          </div>
+        </div>
 
-      <textarea
-        placeholder="Content"
-        value={form.content}
-        onChange={(e) =>
-          setForm({ ...form, content: e.target.value })
-        }
-      />
+        <div className="flex items-center justify-between w-full bg-blue-600 text-white p-10 rounded-sm my-5">
+          <div className="flex gap-5">
+            <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("members")}>
+              Total Members
+              <span className="ml-2 bg-white text-blue-600 px-2 py-1 rounded-sm">
+                {stat.members}
+              </span>
+            </button>
+            <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("posts")}>
+              Total Posts
+              <span className="ml-2 bg-white text-blue-600 px-2 py-1 rounded-sm">
+                {stat.posts}
+              </span>
+            </button>
+            <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("subscriptions")}>
+              Subscriptions
+              <span className="ml-2 bg-white text-blue-600 px-2 py-1 rounded-sm">
+                {stat.subscriptions}
+              </span>
+            </button>
+          </div>
+        </div>
 
-    
-      <input
-        type="file"
-        onChange={(e) => setImage(e.target.files[0])}
-      />
+        <div className="flex w-full justify-between gap-5 mb-10">
+        <div className="bg-white w-[30%] p-4 shadow rounded mb-10 outline-none focus:outline-none">
+          <h3 className="mb-4">Overview</h3>
+          <ResponsiveContainer width="60%" height={300}>
+            <BarChart data={barData} >
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="value" fill="#3b82f6">
+                <Cell fill="#3b82f6" />
+                <Cell fill="#10b981" />
+                <Cell fill="#f59e0b" />
 
-      <button onClick={handlePost}>Create Post</button>
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        <div className="bg-white p-4 shadow rounded h-92 w-[70%]">
+          <h3 className="mb-4">Engagement per Day</h3>
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={engagement}>
+              <XAxis dataKey="day" />
+              <YAxis />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="count"
+                stroke="#8b5cf6"
+                strokeWidth={3}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+        </div>
+
+        {active === "create" && <CreatePost />}
+        {active === "update" && <Update />}
+        {active === "delete" && <DeletePost />}
+        {active === "profile" && <Profile />}
+        {active === "monitoring" && <Monitoring />}
+        {active === "newsletter" && <NewsLetter />}
+        {active === "published" && <Published />}
+        {active === "draft" && <Draft />}
+
+      </div>
+
+
     </div>
   );
 };

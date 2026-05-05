@@ -24,7 +24,7 @@ const Register = () => {
   };
 
   return (
-    <div>
+    <div className="p-20">
       <h2>Register</h2>
       {success && <p className="text-green-500">{success}</p>}
       {error && <p className="text-red-500">{error}</p>}

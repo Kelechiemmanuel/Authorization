@@ -79,23 +79,75 @@ app.get('/post', async (req, res) => {
     }
 });
 
+app.get('/stats', async (req, res) => {
+    try {
+        const members = await pool.query("SELECT COUNT(*) FROM users");
+        const posts = await pool.query("SELECT COUNT(*) FROM posts");
+        const subscriptions = await pool.query("SELECT COUNT(*) FROM subscriptions");
 
-// app.post('/post', authToken, async (req, res) => {
-//     const { title, content } = req.body;
-//     try {
-//         const result = await pool.query("INSERT INTO posts (title, content, author_id) VALUES ($1, $2, $3) RETURNING * ", [title, content, req.user.id]);
-//         return res.status(200).json({
-//             message: "Post created successfully",
-//             post: result.rows[0]
-//         })
+        res.json({
+            members: members.rows[0].count,
+            posts: posts.rows[0].count,
+            subscriptions: subscriptions.rows[0].count,
+        });
+    } catch (error) {
+        console.error("STATS ERROR", error.message);
+        res.status(500).json({
+            error: "Failed to fetch stats"
+        });
+    };
+});
 
-//     } catch (error) {
-//         console.error("POST ERROR", error.message);
-//         res.status(400).json({
-//             error: "Fail to post blog"
-//         });
-//     };
-// });
+app.get('/engagement', async (req, res) => {
+    try {
+        const result = await pool.query(`SELECT     DATE(created_at) as day,
+        COUNT(*) as count
+      FROM posts
+      GROUP BY day
+      ORDER BY day ASC`);
+        res.json(result.rows);
+    } catch (error) {
+        console.error("ENGAGEMENT ERROR", error.message);
+        res.status(500).json({
+            error: "Failed to fetch engagement data"
+        });
+    }
+})
+
+app.post('/subscriptions', async (req, res) => {
+    const { email } = req.body;
+
+    if (!email) {
+        return res.status(400).json({
+            error: "Email is required"
+        });
+    }
+
+    try {
+        const result = await pool.query(
+            "INSERT INTO subscriptions (email) VALUES ($1) RETURNING *",
+            [email]
+        );
+
+        res.json({
+            message: "Subscribed successfully",
+            subscriber: result.rows[0]
+        });
+
+    } catch (error) {
+        console.error("SUBSCRIBE ERROR:", error.message);
+
+        if (error.code === "23505") {
+            return res.status(400).json({
+                error: "Email already subscribed"
+            });
+        }
+
+        res.status(500).json({
+            error: "Subscription failed"
+        });
+    }
+});
 
 
 app.post('/register', async (req, res) => {

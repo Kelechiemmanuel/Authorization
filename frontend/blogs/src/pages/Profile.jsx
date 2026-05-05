@@ -13,7 +13,7 @@ const Profile = () => {
   if (!user) return <p>Loading...</p>;
 
   return (
-    <div>
+    <div className="p-20">
       <h2>Profile</h2>
       <p>Name: {user.name}</p>
       <p>Email: {user.email}</p>
