@@ -17,6 +17,7 @@ const Dashboard = () => {
   const [active, setActive] = useState("create");
   const [user, setUser] = useState(null);
   const [engagement, setEngagement] = useState([]);
+  const [engagementPercent, setEngagementPercent] = useState([]);
   const [stat, setStat] = useState({
     members: 0,
     posts: 0,
@@ -40,17 +41,26 @@ const Dashboard = () => {
       .catch(console.log);
   }, []);
 
-  useEffect(() => {
-    API.get("/engagement")
-      .then((res) => {
-        const formatted = res.data.map(item => ({
-          day: new Date(item.day).toLocaleDateString(),
-          count: Number(item.count),
-        }));
-        setEngagement(formatted);
-      })
-      .catch(console.log);
-  }, []);
+useEffect(() => {
+  API.get("/engagement")
+    .then((res) => {
+      const data = res.data.map(item => ({
+        day: item.day,
+        count: Number(item.count),
+      }));
+
+      const total = data.reduce((sum, item) => sum + item.count, 0);
+
+      const percentData = data.map(item => ({
+        day: item.day,
+        percent: total ? ((item.count / total) * 100).toFixed(1) : 0,
+      }));
+
+      setEngagement(data);
+      setEngagementPercent(percentData);
+    })
+    .catch(console.log);
+}, []);
 
   const barData = [
     { name: "Users", value: stat.members },
@@ -113,40 +123,52 @@ const Dashboard = () => {
         </div>
 
         <div className="flex w-full justify-between gap-5 mb-10">
-        <div className="bg-white w-[30%] p-4 shadow rounded mb-10 outline-none focus:outline-none">
-          <h3 className="mb-4">Overview</h3>
-          <ResponsiveContainer width="60%" height={300}>
-            <BarChart data={barData} >
-              <XAxis dataKey="name" />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="value" fill="#3b82f6">
-                <Cell fill="#3b82f6" />
-                <Cell fill="#10b981" />
-                <Cell fill="#f59e0b" />
+          <div className="bg-white w-[40%] p-4 shadow rounded mb-10 outline-none focus:outline-none">
+            <h3 className="mb-4">Overview</h3>
+            <ResponsiveContainer width="70%" height={300}>
+              <BarChart data={barData} >
+                <XAxis dataKey="name" tick={{ fontSize: 10 }} />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="value" fill="#3b82f6">
+                  <Cell fill="#3b82f6" />
+                  <Cell fill="#10b981" />
+                  <Cell fill="#8b5cf6" />
 
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
 
-        <div className="bg-white p-4 shadow rounded h-92 w-[70%]">
-          <h3 className="mb-4">Engagement per Day</h3>
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={engagement}>
-              <XAxis dataKey="day" />
-              <YAxis />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="count"
-                stroke="#8b5cf6"
-                strokeWidth={3}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <div className="bg-white p-4 shadow rounded h-92 w-[70%]">
+            <h3 className="mb-4">Engagement per Day</h3>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={engagement}>
+                <XAxis dataKey="day" />
+                <YAxis tick={{ fontSize: 10 }}/>
+                <Tooltip />
+                <Line
+                  type="monotone"
+                  dataKey="count"
+                  stroke="#8b5cf6"
+                  strokeWidth={3}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         </div>
-        </div>
+        <div className="bg-white p-4 shadow rounded mt-5">
+  <h3 className="mb-3 font-semibold">Engagement</h3>
+
+  {engagementPercent.map((item, index) => (
+    <div key={index} className="flex justify-between py-2 px-5 border border-gray-500">
+      <span>{item.day}</span>
+      <span className="text-green-600 font-bold">
+        {item.percent}%
+      </span>
+    </div>
+  ))}
+</div>
 
         {active === "create" && <CreatePost />}
         {active === "update" && <Update />}

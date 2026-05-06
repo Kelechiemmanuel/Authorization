@@ -227,8 +227,9 @@ app.get('/profile', authToken, async (req, res) => {
 
 app.put('/profile', authToken, async (req, res) => {
     const { name, email } = req.body;
+    const imageUrl = req.file?.path;
     try {
-        const result = await pool.query("UPDATE users SET name=$1, email=$2 WHERE id=$3 RETURNING id, email, name", [name, email, req.user.id]);
+        const result = await pool.query("UPDATE users SET name=$1, email=$2, image_url=$3 WHERE id=$4 RETURNING id, email, name, image_url", [name, email, imageUrl, req.user.id]);
         res.json({
             message: "Profile updated successfully",
             user: result.rows[0]

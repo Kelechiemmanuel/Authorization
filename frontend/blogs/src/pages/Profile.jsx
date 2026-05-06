@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import API from "../api";
+import API from "../API";
 
 const Profile = () => {
   const [user, setUser] = useState(null);

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import API from "../api";
+import API from "../API";
 
 const Subscribe = () => {
   const [email, setEmail] = useState("");
