@@ -79,6 +79,23 @@ app.get('/post', async (req, res) => {
     }
 });
 
+app.get('/post/latest', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT posts.*, users.name AS name
+      FROM posts
+      JOIN users ON posts.author_id = users.id
+      ORDER BY posts.created_at DESC
+      LIMIT 1
+    `);
+
+    res.json(result.rows[0]); // single post
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to fetch latest post" });
+  }
+});
+
 app.get('/stats', async (req, res) => {
     try {
         const members = await pool.query("SELECT COUNT(*) FROM users");

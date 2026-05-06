@@ -11,6 +11,7 @@ import NewsLetter from "./NewsLetter";
 import Published from "./Published";
 import Draft from "./Draft";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
+import AllPost from "./AllPost";
 
 
 const Dashboard = () => {
@@ -169,6 +170,8 @@ useEffect(() => {
     </div>
   ))}
 </div>
+
+<AllPost />
 
         {active === "create" && <CreatePost />}
         {active === "update" && <Update />}
