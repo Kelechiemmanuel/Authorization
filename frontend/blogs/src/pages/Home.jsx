@@ -20,7 +20,7 @@ const Home = () => {
 
   return (
     <div className=''>
-      <div className='bg-[#1f2228] w-full h-100 relative mb-200'>
+      <div className='bg-[#1f2228] w-full h-100 relative mb-180'>
         <div className='w-full absolute top-[50%] flex justify-between items-center gap-20 px-42'>
           <img src={cover} alt={cover} className='shadow' />
           <div className='flex justify-center items-center flex-col p-5 gap-5 w-full mt-50'>
@@ -46,7 +46,7 @@ const Home = () => {
           </div>
         </div>
       </div>
-
+      
       <div className='grid grid-cols-3 place-items-center w-full px-40 gap-10'>
         <div className='border border-[#d9dcde] text-[#1f2228] text-[13px] p-10 rounded-sm'>
           <div className='flex items-center gap-2'>
