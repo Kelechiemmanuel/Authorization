@@ -18,7 +18,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex justify-between items-center p-4 shadow fixed w-full bg-white z-10 top-0">
+    <nav className="flex justify-between items-center p-4 shadow fixed w-full bg-white z-10 top-0 px-42">
       <h1
         className="font-bold text-xl cursor-pointer"
         onClick={() => navigate("/")}
@@ -26,7 +26,7 @@ const Navbar = () => {
         JETkey
       </h1>
 
-      <div className='flex justify-center items-center gap-5'>
+      <div className='flex justify-center items-center gap-10'>
         <Link to="/">Home</Link>
         <Link to="/products">Products</Link>
         <Link to="/designs">Designs</Link>
