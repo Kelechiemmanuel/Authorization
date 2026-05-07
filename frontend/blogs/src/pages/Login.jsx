@@ -45,7 +45,7 @@ const Login = () => {
         }
       />
 
-      <button onClick={handleLogin}>Login</button>
+      <button onClick={handleLogin} className="cursor-pointer">Login</button>
     </div>
   );
 };

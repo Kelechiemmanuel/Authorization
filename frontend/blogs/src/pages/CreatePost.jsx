@@ -70,7 +70,7 @@ const CreatePost = () => {
         onChange={(e) => setImage(e.target.files[0])}
       />
 
-      <button onClick={handlePost}>Create Post</button>
+      <button onClick={handlePost} className='cursor-pointer'>Create Post</button>
     </div>
   )
 }

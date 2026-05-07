@@ -8,6 +8,7 @@ import cover from '../assets/cover.png';
 import Specialization from './Specialization';
 import Footer from './Footer';
 import DeletePost from './DeletePost';
+import Recent from './Recent';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -87,6 +88,9 @@ const Home = () => {
             </div>
           </div>
         ))}
+        <div>
+          <Recent />
+        </div>
       </div>
 
       <div className='bg-[#f4f5f8] py-8'>

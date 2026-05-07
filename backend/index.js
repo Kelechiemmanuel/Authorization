@@ -79,14 +79,14 @@ app.get('/post', async (req, res) => {
     }
 });
 
-app.get('/post/latest', async (req, res) => {
+app.get('/latest', async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT posts.*, users.name AS name
       FROM posts
       JOIN users ON posts.author_id = users.id
       ORDER BY posts.created_at DESC
-      LIMIT 1
+      LIMIT 4
     `);
 
     res.json(result.rows[0]); // single post

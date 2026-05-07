@@ -14,7 +14,7 @@ const AllPost = () => {
   }, []);
 
   const fetchPosts = () => {
-    API.get("/post/latest")
+    API.get("/post")
       .then((res) => setPosts(res.data))
       .catch(console.log);
   };
@@ -41,7 +41,7 @@ const AllPost = () => {
   // UPDATE
 //   const handleUpdate = async (id) => {
 //     try {
-//       await API.put(`/record/${id}`, form);
+//       await API.put(`/record/${id}`, form); // ⚠️ adjust endpoint if needed
 //       setEditingId(null);
 //       fetchPosts();
 //     } catch (err) {
