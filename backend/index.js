@@ -89,7 +89,7 @@ app.get('/latest', async (req, res) => {
       LIMIT 4
     `);
 
-    res.json(result.rows[0]); // single post
+    res.json(result.rows); // single post
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to fetch latest post" });
@@ -310,6 +310,81 @@ app.delete('/admin/:id', authToken, async (req, res) => {
             error: "Failed to delete post"
         });
     }
+});
+
+app.put('/admin/:id', authToken, async (req, res) => {
+
+    if (req.user.role !== 'admin') {
+        return res.status(403).json({
+            error: "Access denied"
+        });
+    }
+
+    const { title, content } = req.body;
+
+    try {
+
+        const result = await pool.query(
+            "UPDATE posts SET title=$1, content=$2 WHERE id=$3 RETURNING *",
+            [title, content, req.params.id]
+        );
+
+        res.json({
+            message: "Post updated",
+            post: result.rows[0]
+        });
+
+    } catch (error) {
+
+        console.error(error.message);
+
+        res.status(500).json({
+            error: "Failed to update post"
+        });
+    }
+});
+
+app.get('/recent-activity', async (req, res) => {
+  try {
+
+    const posts = await pool.query(`
+      SELECT 
+        title,
+        created_at,
+        'post' AS type
+      FROM posts
+      ORDER BY created_at DESC
+      LIMIT 5
+    `);
+
+    const subscriptions = await pool.query(`
+      SELECT 
+        email,
+        created_at,
+        'subscription' AS type
+      FROM subscriptions
+      ORDER BY created_at DESC
+      LIMIT 5
+    `);
+
+    const activity = [
+      ...posts.rows,
+      ...subscriptions.rows
+    ];
+
+    activity.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+
+    res.json(activity.slice(0, 8));
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to fetch activity"
+    });
+  }
 });
 
 const PORT = process.env.PORT || 3999;

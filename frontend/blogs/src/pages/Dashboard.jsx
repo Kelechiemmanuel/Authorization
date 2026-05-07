@@ -12,6 +12,7 @@ import Published from "./Published";
 import Draft from "./Draft";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
 import AllPost from "./AllPost";
+import RecentActivity from "./RecentActivity";
 
 
 const Dashboard = () => {
@@ -172,6 +173,8 @@ useEffect(() => {
 </div>
 
 <AllPost />
+
+<RecentActivity />
 
         {active === "create" && <CreatePost />}
         {active === "update" && <Update />}

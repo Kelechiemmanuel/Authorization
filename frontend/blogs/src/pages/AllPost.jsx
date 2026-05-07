@@ -1,120 +1,73 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react'
 import API from '../API';
+import DeletePost from './DeletePost';
+import Update from './Update';
 
 const AllPost = () => {
   const [posts, setPosts] = useState([]);
-  const [editingId, setEditingId] = useState(null);
-  const [form, setForm] = useState({
-    title: "",
-    content: ""
-  });
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    fetchPosts();
+    API.get("/post")
+      .then((res) => {
+        console.log(res.data); // check data
+        setPosts(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch(console.log);
   }, []);
 
-  const fetchPosts = () => {
-    API.get("/post")
-      .then((res) => setPosts(res.data))
-      .catch(console.log);
-  };
-
-  // DELETE
-  const handleDelete = async (id) => {
-    try {
-      await API.delete(`/admin/${id}`);
-      fetchPosts(); // refresh list
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  // START EDIT
-  const handleEdit = (post) => {
-    setEditingId(post.id);
-    setForm({
-      title: post.title,
-      content: post.content
-    });
-  };
-
-  // UPDATE
-//   const handleUpdate = async (id) => {
-//     try {
-//       await API.put(`/record/${id}`, form); // ⚠️ adjust endpoint if needed
-//       setEditingId(null);
-//       fetchPosts();
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
+  const filteredPosts = posts
+    .filter((post) =>
+      post.title.toLowerCase().includes(search.toLowerCase())
+    )
+    .slice(0, 4);
 
   return (
-    <div className="p-5">
-      <h1 className="text-xl font-bold mb-5">All Posts</h1>
+    <div className="bg-[#111] text-white p-6 rounded-xl">
 
-      <div className="grid grid-cols-3 gap-5">
-        {posts.map((post) => (
-          <div key={post.id} className="bg-white p-4 shadow rounded">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Recent Posts</h1>
 
-            {editingId === post.id ? (
-              <>
-                <input
-                  className="border w-full mb-2 p-2"
-                  value={form.title}
-                  onChange={(e) =>
-                    setForm({ ...form, title: e.target.value })
-                  }
-                />
+        <input
+          type="text"
+          placeholder="Search post..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="bg-[#1f1f1f] border border-gray-700 px-4 py-2 rounded-lg outline-none"
+        />
+      </div>
 
-                <textarea
-                  className="border w-full mb-2 p-2"
-                  value={form.content}
-                  onChange={(e) =>
-                    setForm({ ...form, content: e.target.value })
-                  }
-                />
+      <div className="space-y-4">
+        {filteredPosts.map((post) => (
+          <div
+            key={post.id}
+            className="bg-[#1a1a1a] border border-gray-700 rounded-xl p-4 flex justify-between items-center"
+          >
+            <div>
+              <h2 className="font-semibold text-lg">
+                {post.title}
+              </h2>
 
-                <button
-                  onClick={() => handleUpdate(post.id)}
-                  className="bg-green-500 text-white px-3 py-1 mr-2"
-                >
-                  Save
-                </button>
+              <p className="text-gray-400 text-sm">
+                {new Date(post.created_at).toLocaleDateString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                })}
+              </p>
+            </div>
 
-                <button
-                  onClick={() => setEditingId(null)}
-                  className="bg-gray-400 text-white px-3 py-1"
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <>
-                <h3 className="font-bold">{post.title}</h3>
-                <p className="text-sm text-gray-500">By {post.name}</p>
-                <p className="text-sm mt-2 line-clamp-2">
-                  {post.content}
-                </p>
+            <div className="flex gap-3">
+              <button className="border border-blue-500 text-blue-500 px-4 py-1 rounded-lg hover:bg-blue-500 hover:text-white transition">
+                Update
+              </button>
 
-                <div className="flex gap-2 mt-3">
-                  <button
-                    onClick={() => handleEdit(post)}
-                    className="bg-blue-500 text-white px-3 py-1"
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() => handleDelete(post.id)}
-                    className="bg-red-500 text-white px-3 py-1"
-                  >
-                    Delete
-                  </button>
-                </div>
-              </>
-            )}
-
+              <DeletePost
+                postId={post.id}
+                onDelete={(id) =>
+                  setPosts(posts.filter((p) => p.id !== id))
+                }
+              />
+            </div>
           </div>
         ))}
       </div>
