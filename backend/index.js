@@ -79,7 +79,7 @@ app.get('/post', async (req, res) => {
     }
 });
 
-app.get('/latest', async (req, res) => {
+app.get('/post/latest', async (req, res) => {
   try {
     const result = await pool.query(`
       SELECT posts.*, users.name AS name
@@ -354,7 +354,7 @@ app.get('/recent-activity', async (req, res) => {
         'post' AS type
       FROM posts
       ORDER BY created_at DESC
-      LIMIT 5
+      LIMIT 2
     `);
 
     const subscriptions = await pool.query(`
@@ -364,7 +364,7 @@ app.get('/recent-activity', async (req, res) => {
         'subscription' AS type
       FROM subscriptions
       ORDER BY created_at DESC
-      LIMIT 5
+      LIMIT 2
     `);
 
     const activity = [

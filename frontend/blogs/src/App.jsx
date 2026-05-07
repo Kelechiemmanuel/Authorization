@@ -15,6 +15,7 @@ import NewsLetter from './pages/NewsLetter';
 
 const App = () => {
   return (
+    <div>
     <BrowserRouter>
         <Navbar />
        <Routes>
@@ -68,6 +69,7 @@ const App = () => {
        </Routes>
     
     </BrowserRouter>
+    </div>
   )
 }
 
