@@ -3,3 +3,28 @@
 body {
   font-family: "Poppins", sans-serif;
 }
+
+/* index.css */
+html.dark {
+    background-color: #1f2228;
+    color: #f9fafb;
+}
+
+.dark .bg-\[\#f4f5f8\] {
+    background-color: #1f2937 !important;
+}
+
+.dark .text-\[\#2d2e2e\],
+.dark .text-\[\#1f2228\],
+.dark .text-\[\#6d7275\] {
+    color: #e5e7eb !important;
+}
+
+.dark nav {
+    background-color: #1f2228 !important;
+    color: #f9fafb !important;
+}
+
+.dark a {
+    color: #e5e7eb !important;
+}

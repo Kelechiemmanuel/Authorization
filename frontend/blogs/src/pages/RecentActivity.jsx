@@ -11,7 +11,7 @@ const RecentActivity = () => {
     }, []);
 
     return (
-        <div className="bg-white p-5 rounded shadow mt-10">
+        <div className="bg-[#111111] p-5 rounded shadow text-white mt-10">
             <h2 className="text-xl font-bold mb-5">
                 Recent Activity
             </h2>

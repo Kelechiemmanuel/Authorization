@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login'
@@ -14,10 +14,23 @@ import Published from './pages/Published';
 import NewsLetter from './pages/NewsLetter';
 
 const App = () => {
+    const [theme, setTheme] = useState (
+        localStorage.getItem('theme') || 'light'
+    );
+
+    useEffect(() => {
+        if (theme === 'dark') {
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+        localStorage.setItem('theme', theme)
+    }, [theme])
+    const toggleTheme = () => setTheme(t => t === 'dark' ? 'light' : 'dark')
   return (
-    <div>
+    <div className=''>
     <BrowserRouter>
-        <Navbar />
+        <Navbar toggleTheme={toggleTheme} theme={theme}/>
        <Routes>
          <Route path="/" element={<Home />} />
          <Route path='/login' element={<Login />} />
@@ -33,7 +46,7 @@ const App = () => {
          <Route 
             path='/dashboard'
             element={<ProtectedRoute>
-                <Dashboard />
+                <Dashboard toggleTheme={toggleTheme} theme={theme}/>
             </ProtectedRoute>} 
          />
          <Route 

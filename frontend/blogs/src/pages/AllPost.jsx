@@ -23,7 +23,7 @@ const AllPost = () => {
     .slice(0, 4);
 
   return (
-    <div className="bg-[#111] text-white p-6 rounded-xl">
+    <div className="bg-[#181a1e] text-white p-6 rounded-sm">
 
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Recent Posts</h1>
@@ -41,7 +41,7 @@ const AllPost = () => {
         {filteredPosts.map((post) => (
           <div
             key={post.id}
-            className="bg-[#1a1a1a] border border-gray-700 rounded-xl p-4 flex justify-between items-center"
+            className=" border border-gray-700 rounded-xl p-4 flex justify-between items-center"
           >
             <div>
               <h2 className="font-semibold text-lg">

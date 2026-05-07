@@ -2,7 +2,7 @@ import React from 'react'
 
 const Sidebar = ({ setActive }) => {
   return (
-    <div className='w-60 fixed top-14 left-0 h-screen bg-blue-600 text-white p-6'>
+    <div className='w-60 fixed top-14 left-0 h-screen p-6 border-r'>
       <div className='flex flex-col items-left justify-between h-full'>
         <div className='flex flex-col gap-5'>
           <h4 className='font-bold text-lg'>Dashboard</h4>

@@ -1,12 +1,12 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
-import { Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import Home from "../pages/Home";
 import Products from "../pages/Products";
 import Designs from "../pages/Designs";
 import Development from "../pages/Development";
 
-const Navbar = () => {
+const Navbar = ({ toggleTheme, theme }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -39,12 +39,22 @@ const Navbar = () => {
           <>
             <button onClick={() => navigate("/login")}>Login</button>
             <button onClick={() => navigate("/register")}>Register</button>
+            <div>
+              <button onClick={toggleTheme}>
+                {theme === 'dark' ? '☀️' : '🌙'}
+              </button>
+            </div>
           </>
+
         ) : (
 
           <>
-            {/* <button onClick={() => navigate("/profile")}>Profile</button> */}
             <button onClick={logout}>Logout</button>
+            <div>
+              <button onClick={toggleTheme}>
+                {theme === 'dark' ? '☀️' : '🌙'}
+              </button>
+            </div>
           </>
         )}
       </div>
