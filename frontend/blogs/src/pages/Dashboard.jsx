@@ -10,13 +10,14 @@ import Profile from "./Profile";
 import NewsLetter from "./NewsLetter";
 import Published from "./Published";
 import Draft from "./Draft";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, LineChart, Line } from "recharts";
 import AllPost from "./AllPost";
 import RecentActivity from "./RecentActivity";
 
 
 const Dashboard = () => {
-  const [active, setActive] = useState("create");
+  const [active, setActive] = useState(() => {
+    return localStorage.getItem("activePage") || "dashboard";
+  });
   const [user, setUser] = useState(null);
   const [engagement, setEngagement] = useState([]);
   const [engagementPercent, setEngagementPercent] = useState([]);
@@ -43,26 +44,9 @@ const Dashboard = () => {
       .catch(console.log);
   }, []);
 
-  useEffect(() => {
-    API.get("/engagement")
-      .then((res) => {
-        const data = res.data.map(item => ({
-          day: item.day,
-          count: Number(item.count),
-        }));
-
-        const total = data.reduce((sum, item) => sum + item.count, 0);
-
-        const percentData = data.map(item => ({
-          day: item.day,
-          percent: total ? ((item.count / total) * 100).toFixed(1) : 0,
-        }));
-
-        setEngagement(data);
-        setEngagementPercent(percentData);
-      })
-      .catch(console.log);
-  }, []);
+useEffect(() => {
+  localStorage.setItem("activePage", active);
+}, [active]);
 
   const barData = [
     { name: "Users", value: stat.members },
@@ -95,86 +79,45 @@ const Dashboard = () => {
             <button className="bg-[rgba(0,0,0,0.1)] p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("update")}>
               Update Post
             </button>
-            <button className="bg-[rgba(0,0,0,0.1)] p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("delete")}>
+            <button className="bg-[rgba(0,0,0,0.1)] p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("dashboard")}>
               Delete Post
             </button>
           </div>
         </div>
 
-        <div className="flex items-center justify-between w-full bg-[#111] text-white p-10 rounded-sm my-5">
-          <div className="flex gap-5">
-            <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("members")}>
-              Total Members
-              <span className="ml-2 bg-white text-black px-2 py-1 rounded-sm">
-                {stat.members}
-              </span>
-            </button>
-            <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("posts")}>
-              Total Posts
-              <span className="ml-2 bg-white text-black px-2 py-1 rounded-sm">
-                {stat.posts}
-              </span>
-            </button>
-            <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("subscriptions")}>
-              Subscriptions
-              <span className="ml-2 bg-white text-black px-2 py-1 rounded-sm">
-                {stat.subscriptions}
-              </span>
-            </button>
-          </div>
-        </div>
-
-        <div className="flex w-full justify-between gap-5 mb-10">
-          <div className="bg-[#181a1e] w-[40%] p-4 shadow rounded mb-10 outline-none focus:outline-none">
-            <h3 className="mb-4 text-white">Overview</h3>
-            <ResponsiveContainer width="70%" height={300}>
-              <BarChart data={barData} >
-                <XAxis dataKey="name" tick={{ fontSize: 10 }} />
-                <YAxis />
-                <Tooltip />
-                <Bar dataKey="value" fill="#3b82f6">
-                  <Cell fill="#3b82f6" />
-                  <Cell fill="#10b981" />
-                  <Cell fill="#8b5cf6" />
-
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-
-          <div className="bg-[#181a1e] p-4 shadow rounded h-92 w-[70%]">
-            <h3 className="mb-4 text-white">Engagement per Day</h3>
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={engagement}>
-                <XAxis dataKey="day" />
-                <YAxis tick={{ fontSize: 10 }} />
-                <Tooltip />
-                <Line
-                  type="monotone"
-                  dataKey="count"
-                  stroke="#8b5cf6"
-                  strokeWidth={3}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-        <div className="bg-[#111111] text-white p-4 shadow rounded my-5 flex gap-5 flex-col">
-          <h3 className="font-semibold">Engagement</h3>
-
-          {engagementPercent.map((item, index) => (
-            <div key={index} className="flex justify-between py-2 px-5 border border-gray-500">
-              <span>{item.day}</span>
-              <span className="text-green-600 font-bold">
-                {item.percent}%
-              </span>
+        {active === 'dashboard' && (
+          <>
+            <div className="flex items-center justify-between w-full bg-[#111] text-white p-10 rounded-sm my-5">
+              <div className="flex gap-5">
+                <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("members")}>
+                  Total Members
+                  <span className="ml-2 bg-white text-black px-2 py-1 rounded-sm">
+                    {stat.members}
+                  </span>
+                </button>
+                <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("posts")}>
+                  Total Posts
+                  <span className="ml-2 bg-white text-black px-2 py-1 rounded-sm">
+                    {stat.posts}
+                  </span>
+                </button>
+                <button className="bg-[rgba(0,0,0,0.1)] text-white p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("subscriptions")}>
+                  Subscriptions
+                  <span className="ml-2 bg-white text-black px-2 py-1 rounded-sm">
+                    {stat.subscriptions}
+                  </span>
+                </button>
+              </div>
             </div>
-          ))}
-        </div>
 
-        <AllPost />
+            <Monitoring />
 
-        <RecentActivity />
+            <AllPost />
+
+            <RecentActivity />
+          </>
+        )}
+
 
         {active === "create" && <CreatePost />}
         {active === "update" && <Update />}

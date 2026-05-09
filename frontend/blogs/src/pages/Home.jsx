@@ -5,10 +5,12 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import Subscribe from './Subscribe';
 import cover from '../assets/cover.png';
+import back from '../assets/back.png';
 import Specialization from './Specialization';
 import Footer from './Footer';
 import DeletePost from './DeletePost';
 import Recent from './Recent';
+import { motion } from 'framer-motion'
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -23,11 +25,13 @@ const Home = () => {
   }, []);
 
   return (
-    <div className=''>
-      <div className='bg-[#1f2228] w-full h-100 relative mb-180'>
-        <div className='w-full absolute top-[50%] flex justify-between items-center gap-20 px-42'>
+    <motion.div className=''>
+      <div className='bg-[#1f2228] w-full h-100'>
+        <div className='w-full flex flex-col px-5 items-center gap-20 pt-40
+        lg:justify-between lg:px-42 lg:flex-row
+        '>
           <img src={cover} alt={cover} className='shadow' />
-          <div className='flex justify-center items-center flex-col p-5 gap-5 w-full mt-50'>
+          <div className='flex justify-center items-center flex-col p-5 gap-5 w-full lg:pt-70 '>
             <h1 className='font-bold text-3xl text-[#1f2228]'>Daily News</h1>
             <Links />
             <hr className='border w-full border-[#e3e5e6] my-5' />
@@ -52,8 +56,8 @@ const Home = () => {
       </div>
 
 
-      <div>
-        <div className='px-40 my-20'>
+      <div className='lg:mt-180 mt-300'>
+        <div className='lg:px-40 px-5 my-20'>
           <hr className='border border-[#e3eff7]' />
         </div>
         <Specialization />
@@ -62,7 +66,9 @@ const Home = () => {
         </div>
       </div>
 
-      <div className='grid grid-cols-4 gap-10 place-items-center w-full px-40 mt-20'>
+      <div className='grid gap-10 grid-cols-1 px-5 place-items-center w-full mt-20
+      lg:grid-cols-4 lg:px-40
+      '>
         {posts.map((post) => (
           <div
             key={post.id}
@@ -70,11 +76,17 @@ const Home = () => {
             className="cursor-pointer"
           >
             {post.image_url && (
-              <div className="w-full overflow-hidden shadow-2xl rounded-sm relative">
+              <div className="w-full overflow-hidden shadow-2xl rounded-sm relative blog shrink-0">
                 <img
                   src={post.image_url}
                   alt={post.title}
-                  className="w-full h-113 object-cover hover:scale-110 transition duration-500"
+                  className="
+                    w-full
+                    h-64 sm:h-80 md:h-96 lg:h-112.5
+                    object-cover object-top
+                    hover:scale-110
+                    transition duration-500
+                  "
                 />
                 <div className='absolute bg-[rgba(0,0,0,0.69)] bottom-0 w-full py-5 text-center'>
                   <small className='text-white'>By {post.name}</small>
@@ -82,14 +94,14 @@ const Home = () => {
               </div>
 
             )}
-            <div className='text-center my-8'>
+            <div className='text-center mt-8'>
               <h2 className="font-bold text-[#2d2e2e] mb-8 text-center">{post.title}</h2>
               <p className="line-clamp-2 text-[13px] text-[#6d7275]">{post.content}</p>
             </div>
           </div>
         ))}
         <div>
-          <Recent />
+          {/* <Recent /> */}
         </div>
       </div>
 
@@ -109,7 +121,7 @@ const Home = () => {
       </div>
 
 
-    </div>
+    </motion.div>
   )
 }
 

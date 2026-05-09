@@ -3,15 +3,15 @@ import API from '../API'
 
 const Update = ({ post, onUpdate }) => {
 
-  const [title, setTitle] = useState(post.title);
-  const [content, setContent] = useState(post.content);
+  const [title, setTitle] = useState('title');
+  const [content, setContent] = useState('content');
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
 
   const handleUpdate = async () => {
     try {
 
-      const res = await API.put(`/admin/${post.id}`, {
+      const res = await API.put(`/admin`, {
         title,
         content,
       });

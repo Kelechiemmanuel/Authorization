@@ -18,9 +18,11 @@ const Subscribe = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 place-items-center w-full px-39 gap-10 my-20">
+    <div className="grid grid-cols-1 place-items-center w-full gap-10 my-10 px-5
+    lg:grid-cols-2 lg:px-39
+    ">
       <div className='border border-[#d9dcde] text-[#1f2228] p-10 rounded-sm'>
-        <h1>Stay Informed with Early Updates!</h1>
+        <h1 className="text-[13px]">Stay Informed with Early Updates!</h1>
         <p className='text-[14px] leading-8'>
           Subscribe to our newsletter and receive the latest theme updates and important news directly to your inbox.
         </p>
@@ -28,13 +30,13 @@ const Subscribe = () => {
       <div>
         <h3 className="text-[#1f2228]">Subscribe to our blog</h3>
 
-        <div className="border border-[#e3e5e6] w-full p-2 rounded-sm pl-5 mt-5">
+        <div className="border border-[#e3e5e6] w-full p-2 rounded-sm lg:pl-5 pl-0 mt-5">
           <input
             type="email"
             placeholder="Enter email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="outline-0 pr-50"
+            className="outline-0 lg:pr-50"
           />
           <button onClick={handleSubscribe} className="px-5 py-3 bg-[#1f2228] outline-0 rounded-sm text-[#d9dcde] cursor-pointer">
             Subscribe

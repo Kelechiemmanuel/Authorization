@@ -1,9 +1,26 @@
 import React from 'react'
+import { motion } from 'framer-motion'
 
 const Specialization = () => {
     return (
-        <div>
-            <div className='grid grid-cols-3 place-items-center w-full px-40 gap-10'>
+        <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.98 }}
+            animate={{ opacity: 3, y: -12, scale: 1 }}
+            exit={{ opacity: 0, y: -50, scale: 0.98 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+        >
+            <motion.div
+                initial={{ opacity: 0, y: 50, scale: 0.98 }}
+                animate={{ opacity: 3, y: -12, scale: 1 }}
+                exit={{ opacity: 0, y: -50, scale: 0.98 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className='grid grid-cols-1 place-items-center w-full px-5 gap-10
+                lg:grid-cols-3  lg:px-40
+                '>
                 <div className='border border-[#d9dcde] text-[#1f2228] text-[13px] p-10 rounded-sm'>
                     <div className='flex items-center gap-2'>
                         <p className='text-4xl'>✅</p>
@@ -70,8 +87,8 @@ const Specialization = () => {
                         </p>
                     </div>
                 </div>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     )
 }
 

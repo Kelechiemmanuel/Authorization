@@ -8,7 +8,7 @@ const DeletePost = ({ postId, onDelete }) => {
 
   const handleDelete = async () => {
     try {
-      await API.delete(`/admin/${postId}`);
+      await API.delete(`/admin`);
 
       setSuccess("Post deleted successfully");
 

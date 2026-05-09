@@ -12,6 +12,7 @@ import Update from './pages/Update';
 import Draft from './pages/Draft';
 import Published from './pages/Published';
 import NewsLetter from './pages/NewsLetter';
+import Sidebar from './components/Sidebar';
 
 const App = () => {
     const [theme, setTheme] = useState (
@@ -35,6 +36,7 @@ const App = () => {
          <Route path="/" element={<Home />} />
          <Route path='/login' element={<Login />} />
          <Route path='/register' element={<Register />} />
+         
 
          <Route 
             path='/profile'
