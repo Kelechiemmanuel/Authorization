@@ -18,19 +18,33 @@ const Navbar = ({ toggleTheme, theme }) => {
   };
 
   return (
-    <nav className="flex justify-between items-center p-4 shadow fixed w-full bg-white z-10 top-0 px-42">
-      <h1
+    <nav className="flex justify-between items-center p-4 border-b fixed w-full bg-white z-10 top-0 px-42">
+      {/* <h1
         className="font-bold text-xl cursor-pointer"
         onClick={() => navigate("/")}
       >
         JETkey
-      </h1>
+      </h1> */}
+
+      <div className="flex justify-center items-center gap-10">
+        <button>
+          menu
+        </button>
+        <button onClick={toggleTheme}>
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+      </div>
 
       <div className='flex justify-center items-center gap-10'>
-        <Link to="/">Home</Link>
+
+        <div className="flex flex-col gap-2 justify-center items-center">
+          <h1 className="text-3xl font-bold">JetKey News</h1>
+          <p className="">All voices matter</p>
+        </div>
+        {/* <Link to="/">Home</Link>
         <Link to="/products">Products</Link>
         <Link to="/designs">Designs</Link>
-        <Link to="/development">Development</Link>
+        <Link to="/development">Development</Link> */}
       </div>
 
       <div className="flex items-center gap-4">
@@ -39,11 +53,6 @@ const Navbar = ({ toggleTheme, theme }) => {
           <>
             <button onClick={() => navigate("/login")}>Login</button>
             <button onClick={() => navigate("/register")}>Register</button>
-            <div>
-              <button onClick={toggleTheme}>
-                {theme === 'dark' ? '☀️' : '🌙'}
-              </button>
-            </div>
           </>
 
         ) : (
@@ -51,9 +60,9 @@ const Navbar = ({ toggleTheme, theme }) => {
           <>
             <button onClick={logout}>Logout</button>
             <div>
-              <button onClick={toggleTheme}>
+              {/* <button onClick={toggleTheme}>
                 {theme === 'dark' ? '☀️' : '🌙'}
-              </button>
+              </button> */}
             </div>
           </>
         )}

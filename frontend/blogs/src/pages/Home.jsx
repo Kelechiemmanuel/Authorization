@@ -28,9 +28,10 @@ const Home = () => {
     <motion.div className=''>
       <div className='bg-[#1f2228] w-full h-100'>
         <div className='w-full flex flex-col px-5 items-center gap-20 pt-40
+        md:flex-col md:px-10
         lg:justify-between lg:px-42 lg:flex-row
         '>
-          <img src={cover} alt={cover} className='shadow' />
+          <img src={cover} alt={cover} className='shadow w-full' />
           <div className='flex justify-center items-center flex-col p-5 gap-5 w-full lg:pt-70 '>
             <h1 className='font-bold text-3xl text-[#1f2228]'>Daily News</h1>
             <Links />
@@ -56,17 +57,18 @@ const Home = () => {
       </div>
 
 
-      <div className='lg:mt-180 mt-300'>
-        <div className='lg:px-40 px-5 my-20'>
+      <div className='lg:mt-180 md:mt-350 mt-290'>
+        <div className='md:px-14 lg:px-40 px-5 my-20'>
           <hr className='border border-[#e3eff7]' />
         </div>
         <Specialization />
-        <div className='px-40 my-20'>
+        <div className='lg:px-40 md:px-14 px-5 my-20'>
           <hr className='border border-[#e3eff7]' />
         </div>
       </div>
 
       <div className='grid gap-10 grid-cols-1 px-5 place-items-center w-full mt-20
+      md:grid-cols-2 md:px-14
       lg:grid-cols-4 lg:px-40
       '>
         {posts.map((post) => (
@@ -113,7 +115,7 @@ const Home = () => {
           {/* <DeletePost /> */}
         </div>
         <div>
-          <div className='px-37 my-10'>
+          <div className='md:px-14 lg:px-40 px-5 my-10'>
             <hr className='border border-[#e3eff7]' />
           </div>
           <Footer />

@@ -19,6 +19,7 @@ const Specialization = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 className='grid grid-cols-1 place-items-center w-full px-5 gap-10
+                md:grid-cols-2 md:px-14
                 lg:grid-cols-3  lg:px-40
                 '>
                 <div className='border border-[#d9dcde] text-[#1f2228] text-[13px] p-10 rounded-sm'>

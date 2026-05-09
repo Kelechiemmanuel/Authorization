@@ -44,9 +44,9 @@ const Dashboard = () => {
       .catch(console.log);
   }, []);
 
-useEffect(() => {
-  localStorage.setItem("activePage", active);
-}, [active]);
+  useEffect(() => {
+    localStorage.setItem("activePage", active);
+  }, [active]);
 
   const barData = [
     { name: "Users", value: stat.members },
@@ -63,7 +63,7 @@ useEffect(() => {
   return (
     <div className="flex">
       <Sidebar setActive={setActive} />
-      <div className="flex-1 ml-60 min-h-screen p-5 pt-10 mt-10">
+      <div className="flex-1 ml-60 min-h-screen p-5 pt-20 mt-10">
 
         <div className="flex items-center text-white justify-between w-full p-10 rounded-sm bg-[#181a1e]">
           <div>
@@ -73,14 +73,14 @@ useEffect(() => {
           </div>
 
           <div className="flex gap-5">
+            <button className="bg-[rgba(0,0,0,0.1)] p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("dashboard")}>
+              Home
+            </button>
             <button className="bg-[rgba(0,0,0,0.1)] p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("create")}>
               + Create Post
             </button>
             <button className="bg-[rgba(0,0,0,0.1)] p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("update")}>
               Update Post
-            </button>
-            <button className="bg-[rgba(0,0,0,0.1)] p-3 rounded-sm h-10 flex items-center justify-center" onClick={() => setActive("dashboard")}>
-              Delete Post
             </button>
           </div>
         </div>

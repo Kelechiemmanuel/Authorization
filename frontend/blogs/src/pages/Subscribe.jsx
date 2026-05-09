@@ -19,6 +19,7 @@ const Subscribe = () => {
 
   return (
     <div className="grid grid-cols-1 place-items-center w-full gap-10 my-10 px-5
+    md:grid-cols-1 md:px-14
     lg:grid-cols-2 lg:px-39
     ">
       <div className='border border-[#d9dcde] text-[#1f2228] p-10 rounded-sm'>
@@ -30,7 +31,7 @@ const Subscribe = () => {
       <div>
         <h3 className="text-[#1f2228]">Subscribe to our blog</h3>
 
-        <div className="border border-[#e3e5e6] w-full p-2 rounded-sm lg:pl-5 pl-0 mt-5">
+        <div className="flex border border-[#e3e5e6] w-full p-2 rounded-sm lg:pl-5 md:pl-5 pl-0 mt-5">
           <input
             type="email"
             placeholder="Enter email"
