@@ -5,12 +5,13 @@ import Products from '../pages/Products'
 import Designs from '../pages/Designs'
 import Development from '../pages/Development'
 import API from '../API'
-import { Search } from 'lucide-react'
+import { Search, Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 const Links = () => {
-    const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     API.get("/post")
@@ -28,22 +29,53 @@ const Links = () => {
     .slice(0, 4);
 
   return (
-    <div className='flex justify-between items-center gap-5 w-full'>
-      <div>
-          <input
-          placeholder='search post...'
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="bg-[#1f1f1f] border border-gray-700 px-4 py-2 rounded-lg outline-none"
-        />
+    <nav className='flex justify-between items-center gap-5 w-full'>
 
+      <div className='w-full'>
+        
+      <ul className='md:flex gap-5 justify-between hidden w-full'>
+        <Link to="/">All</Link>
+        <Link to="/products">Products</Link>
+        <Link to="/designs">Designs</Link>
+        <Link to="/development">Development</Link>
+      </ul>
+      <div className='flex justify-between w-full'>
+        <h1 className="text-3xl font-bold block lg:hidden">Jet News</h1>
+        <button onClick={() => setOpen(!open)} className='md:hidden cursor-pointer'>
+          {open ? <X size={28} /> : <Menu size={28} />}
+        </button>
       </div>
-      <Link to="/">All</Link>
-      <Link to="/products">Products</Link>
-      <Link to="/designs">Designs</Link>
-      <Link to="/development">Development</Link>
-    </div>
+      </div>
+
+      {open && (
+        <>
+          <div
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 bg-[rgba(0,0,0,0.76)] backdrop-blur-sm z-10"
+          />
+          <ul className={`flex justify-between items-start p-10 fixed left-0 h-screen bg-black top-0 gap-5  transform transition-transform duration-700 ease-out overflow-y-auto
+        md:hidden w-[60%] z-20 ${open ? "translate-x-0" : "translate-x-full"}`}>
+            <div className='flex flex-col justify-center items-start gap-5 mt-10'>
+              <Link to="/" onClick={() => setOpen(false)}>Home</Link>
+              <Link to="/products" onClick={() => setOpen(false)}>Economy</Link>
+              <Link to="/designs" onClick={() => setOpen(false)}>Culture</Link>
+              <Link to="/development" onClick={() => setOpen(false)}>Politics</Link>
+              <Link to="/development" onClick={() => setOpen(false)}>Science</Link>
+              <Link to="/development" onClick={() => setOpen(false)}>Technology</Link>
+              <Link to="/development" onClick={() => setOpen(false)}>Travel</Link>
+              <Link to="/development" onClick={() => setOpen(false)}>World</Link>
+              <Link to="/development" onClick={() => setOpen(false)}>About</Link>
+              <Link to="/development" onClick={() => setOpen(false)}>Contact</Link>
+            </div>
+            <div>
+              <button onClick={() => setOpen(!open)} className='md:hidden cursor-pointer'>
+                {open ? <X size={20} /> : <Menu size={20} />}
+              </button>
+            </div>
+          </ul>
+        </>
+      )}
+    </nav>
   )
 }
 

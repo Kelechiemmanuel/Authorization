@@ -34,7 +34,7 @@ const Home = () => {
           <img src={cover} alt={cover} className='shadow w-full' />
           <div className='flex justify-center items-center flex-col p-5 gap-5 w-full lg:pt-70 '>
             <h1 className='font-bold text-3xl text-[#1f2228]'>Daily News</h1>
-            {/* <Links /> */}
+            <Links />
             <hr className='border w-full border-[#e3e5e6] my-5' />
             <div className='text-[#1f2228]'>
               <p className='text-[14px] leading-5'>
