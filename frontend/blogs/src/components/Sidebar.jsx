@@ -6,7 +6,7 @@ import { NotebookPen, PenSquare, BadgeCheck } from "lucide-react";
 const Sidebar = ({ setActive }) => {
   const navigate = useNavigate();
   return (
-    <div className='w-60 fixed top-25 left-0 h-screen p-6 border-r z-100'>
+    <div className='w-60 fixed top-0 left-0 h-screen p-6 border-r z-100'>
       <div className='flex flex-col items-left justify-between h-full'>
         <div className=''>
           <h4 className='font-bold text-lg mb-3'>Dashboard</h4>

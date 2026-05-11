@@ -11,6 +11,8 @@ import Footer from './Footer';
 import DeletePost from './DeletePost';
 import Recent from './Recent';
 import { motion } from 'framer-motion'
+import WorldMap from './WorldMap';
+import { div } from 'three/src/nodes/math/OperatorNode.js';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -25,6 +27,7 @@ const Home = () => {
   }, []);
 
   return (
+    <div>
     <motion.div className=''>
       <div className='bg-[#1f2228] w-full h-100'>
         <div className='w-full flex flex-col px-5 items-center gap-20 pt-40
@@ -102,12 +105,13 @@ const Home = () => {
             </div>
           </div>
         ))}
-        <div>
+        <div className='justify-center flex'>
           {/* <Recent /> */}
+
         </div>
       </div>
 
-      <div className='bg-[#f4f5f8] py-8'>
+      <div className=' py-8'>
         <div>
           <div className='px-40 my-10'>
           </div>
@@ -124,6 +128,8 @@ const Home = () => {
 
 
     </motion.div>
+    <WorldMap />
+    </div>
   )
 }
 

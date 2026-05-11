@@ -33,7 +33,7 @@ const Specialization = () => {
                         </p>
                     </div>
                 </div>
-                <div className='border border-[#d9dcde] text-[#1f2228] text-[13px] p-10 rounded-sm'>
+                <div className='border border-[#d9dcde] text-white text-[13px] p-10 rounded-sm'>
                     <div className='flex items-center gap-2'>
                         <p className='text-4xl'>✅</p>
                         <h2 className='text-md font-bold text-[#1f2228]'>Responsive & Retina Ready</h2>
