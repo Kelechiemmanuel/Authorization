@@ -189,26 +189,26 @@ const Home = () => {
               onClick={() => navigate(`/post/${post.id}`)}
               className="cursor-pointer"
 
-              initial={{ opacity: 0, y: 60, scale: 0.95 }}
+    initial={{ opacity: 0, y: 60, scale: 0.95 }}
 
-              whileInView={{ opacity: 1, y: 0, scale: 1 }}
+    whileInView={{ opacity: 1, y: 0, scale: 1 }}
 
-              transition={{
-                duration: 0.6,
-                delay: index * 0.08,
-                ease: "easeOut",
-              }}
+    transition={{
+      duration: 0.6,
+      delay: index * 0.08,
+      ease: "easeOut",
+    }}
 
-              viewport={{
-                once: false,
-                amount: 0.4, // 🔥 important fix
-                margin: "-50px",
-              }}
+    viewport={{
+      once: true,
+      amount: 0.4, // 🔥 important fix
+      margin: "-50px",
+    }}
 
-              whileHover={{
-                scale: 1.03,
-                y: -5,
-              }}
+    whileHover={{
+      scale: 1.03,
+      y: -5,
+    }}
             >
               {post.image_url && (
                 <div className="w-full overflow-hidden shadow-2xl rounded-sm relative blog shrink-0">
