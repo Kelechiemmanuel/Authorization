@@ -58,7 +58,7 @@ const Home = () => {
               viewport={{ once: true }}
             />
 
-
+            {/* TEXT CONTENT */}
             <motion.div
               className='flex justify-center items-center flex-col p-5 gap-5 w-full lg:pt-70'
 
@@ -259,7 +259,7 @@ const Home = () => {
 
 
       </motion.div>
-      {/* <WorldMap /> */}
+      <WorldMap />
     </div>
   )
 }
