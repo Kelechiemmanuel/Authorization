@@ -189,18 +189,20 @@ const Home = () => {
               onClick={() => navigate(`/post/${post.id}`)}
               className="cursor-pointer"
 
-              initial={{ opacity: 0, y: 50 }}
+              initial={{ opacity: 0, y: 60, scale: 0.95 }}
 
-              whileInView={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0, scale: 1 }}
 
               transition={{
-                duration: 0.5,
-                delay: index * 0.1,
+                duration: 0.6,
+                delay: index * 0.08,
+                ease: "easeOut",
               }}
 
               viewport={{
                 once: false,
-                amount: 0.2,
+                amount: 0.4, // 🔥 important fix
+                margin: "-50px",
               }}
 
               whileHover={{
