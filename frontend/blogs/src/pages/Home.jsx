@@ -42,6 +42,7 @@ const Home = () => {
     lg:justify-between lg:px-42 lg:flex-row'
           >
 
+            {/* IMAGE */}
             <motion.img
               src={cover}
               alt={cover}
@@ -54,10 +55,7 @@ const Home = () => {
                 duration: 0.8,
               }}
 
-              viewport={{
-                once: true,
-                amount: 0.2,
-              }}
+              viewport={{ once: true }}
             />
 
 
@@ -72,10 +70,7 @@ const Home = () => {
                 delay: 0.2,
               }}
 
-              viewport={{
-                once: true,
-                amount: 0.2,
-              }}
+              viewport={{ once: true }}
             >
 
               <motion.h1
@@ -104,10 +99,7 @@ const Home = () => {
                   delay: 0.3,
                 }}
 
-                viewport={{
-                  once: true,
-                  amount: 0.2,
-                }}
+                viewport={{ once: true }}
               >
 
                 <p className='text-[14px] leading-5'>
@@ -189,26 +181,24 @@ const Home = () => {
               onClick={() => navigate(`/post/${post.id}`)}
               className="cursor-pointer"
 
-    initial={{ opacity: 0, y: 60, scale: 0.95 }}
+              initial={{ opacity: 0, y: 50 }}
 
-    whileInView={{ opacity: 1, y: 0, scale: 1 }}
+              whileInView={{ opacity: 1, y: 0 }}
 
-    transition={{
-      duration: 0.6,
-      delay: index * 0.08,
-      ease: "easeOut",
-    }}
+              transition={{
+                duration: 0.5,
+                delay: index * 0.1,
+              }}
 
-    viewport={{
-      once: true,
-      amount: 0.4, // 🔥 important fix
-      margin: "-50px",
-    }}
+              viewport={{
+                once: true,
+                amount: 0.3,
+              }}
 
-    whileHover={{
-      scale: 1.03,
-      y: -5,
-    }}
+              whileHover={{
+                scale: 1.03,
+                y: -5,
+              }}
             >
               {post.image_url && (
                 <div className="w-full overflow-hidden shadow-2xl rounded-sm relative blog shrink-0">
@@ -269,7 +259,7 @@ const Home = () => {
 
 
       </motion.div>
-      {/* <WorldMap /> */}
+      <WorldMap />
     </div>
   )
 }
