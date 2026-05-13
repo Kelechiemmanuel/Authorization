@@ -1,14 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import Home from '../pages/Home'
 import Products from '../pages/Products'
 import Designs from '../pages/Designs'
 import Development from '../pages/Development'
 import API from '../API'
+import Login from '../pages/Login'
 import { Search, Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 const Links = () => {
+  const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
@@ -32,19 +34,19 @@ const Links = () => {
     <nav className='flex justify-between items-center gap-5 w-full'>
 
       <div className='w-full'>
-        
-      <ul className='md:flex gap-5 justify-between hidden w-full'>
-        <Link to="/">All</Link>
-        <Link to="/products">Products</Link>
-        <Link to="/designs">Designs</Link>
-        <Link to="/development">Development</Link>
-      </ul>
-      <div className='flex justify-between w-full'>
-        <h1 className="text-3xl font-bold block lg:hidden">Jet News</h1>
-        <button onClick={() => setOpen(!open)} className='md:hidden cursor-pointer'>
-          {open ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </div>
+
+        <ul className='md:flex gap-5 justify-between hidden w-full'>
+          <Link to="/">All</Link>
+          <Link to="/products">Products</Link>
+          <Link to="/designs">Designs</Link>
+          <Link to="/development">Development</Link>
+        </ul>
+        <div className='flex justify-between w-full'>
+          <h1 className="text-3xl font-bold block lg:hidden">Jet News</h1>
+          <button onClick={() => setOpen(!open)} className='md:hidden cursor-pointer'>
+            {open ? <X size={28} /> : <Menu size={28} />}
+          </button>
+        </div>
       </div>
 
       {open && (
@@ -66,7 +68,29 @@ const Links = () => {
               <Link to="/development" onClick={() => setOpen(false)}>World</Link>
               <Link to="/development" onClick={() => setOpen(false)}>About</Link>
               <Link to="/development" onClick={() => setOpen(false)}>Contact</Link>
+              <div className="flex gap-4 mt-4">
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    navigate("/login");
+                    setOpen(false);
+                  }}
+                >
+                  Login
+                </button>
+
+                <button
+                  className="cursor-pointer"
+                  onClick={() => {
+                    navigate("/register");
+                    setOpen(false);
+                  }}
+                >
+                  Register
+                </button>
+              </div>
             </div>
+
             <div>
               <button onClick={() => setOpen(!open)} className='md:hidden cursor-pointer'>
                 {open ? <X size={20} /> : <Menu size={20} />}

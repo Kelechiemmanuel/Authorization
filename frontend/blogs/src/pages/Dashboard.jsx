@@ -12,6 +12,7 @@ import Published from "./Published";
 import Draft from "./Draft";
 import AllPost from "./AllPost";
 import RecentActivity from "./RecentActivity";
+import DashboardHeader from "./DashboardHeader";
 
 
 const Dashboard = () => {
@@ -61,8 +62,14 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="flex">
+    <div className="flex relative">
       <Sidebar setActive={setActive} />
+      <div className="flex justify-end items-center fixed top-0 z-10 p-3 w-full bg-[#1f2228] border-b">
+        {/* <div className="text-white">hello</div> */}
+        <div className="">
+          <DashboardHeader />
+        </div>
+      </div>
       <div className="flex-1 ml-60 min-h-screen p-5 pt-20 mt-10">
 
         <div className="flex items-center text-white justify-between w-full p-10 rounded-sm bg-[#181a1e]">
