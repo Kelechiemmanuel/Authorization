@@ -55,7 +55,7 @@ const Home = () => {
               }}
 
               viewport={{
-                once: false,
+                once: true,
                 amount: 0.2,
               }}
             />
@@ -73,7 +73,7 @@ const Home = () => {
               }}
 
               viewport={{
-                once: false,
+                once: true,
                 amount: 0.2,
               }}
             >
@@ -105,7 +105,7 @@ const Home = () => {
                 }}
 
                 viewport={{
-                  once: false,
+                  once: true,
                   amount: 0.2,
                 }}
               >
