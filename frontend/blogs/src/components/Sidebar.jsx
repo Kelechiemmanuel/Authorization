@@ -47,12 +47,6 @@ const Sidebar = ({ setActive }) => {
             Profile
           </button>
         </div>
-
-
-        {/* <div className='mb-10'>
-          <h2 className='font-bold text-lg'>User Info</h2>
-          <button onClick={() => setActive("profile")} className='text-left cursor-pointer'>Profile</button>
-        </div> */}
       </div>
 
 

@@ -12,6 +12,8 @@ import DeletePost from './DeletePost';
 import Recent from './Recent';
 import { motion } from 'framer-motion'
 import WorldMap from './WorldMap';
+import TimeWidget from './TimeWidget';
+import WeatherWidget from './WeatherWidget';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -42,7 +44,6 @@ const Home = () => {
     lg:justify-between lg:px-42 lg:flex-row'
           >
 
-            {/* IMAGE */}
             <motion.img
               src={cover}
               alt={cover}
@@ -60,7 +61,7 @@ const Home = () => {
 
             {/* TEXT CONTENT */}
             <motion.div
-              className='flex justify-center items-center flex-col p-5 gap-5 w-full lg:pt-70'
+              className='flex justify-center items-center flex-col gap-5 w-full lg:pt-70'
 
               initial={{ opacity: 0, x: 100 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -83,10 +84,14 @@ const Home = () => {
               >
                 Daily News
               </motion.h1>
+              <div className='flex gap-10 justify-center items-center'>
+              <WeatherWidget />
+              <TimeWidget />
+              </div>
 
               <Links />
 
-              <hr className='border w-full border-[#e3e5e6] my-5' />
+              <hr className='border w-full border-[#e3e5e6]' />
 
               <motion.div
                 className='text-[#1f2228]'
@@ -161,7 +166,7 @@ const Home = () => {
         </motion.div>
 
 
-        <div className='lg:mt-180 md:mt-350 mt-290'>
+        <div className='lg:mt-180 md:mt-350 mt-300'>
           <div className='md:px-14 lg:px-40 px-5 my-20'>
             <hr className='border border-[#e3eff7]' />
           </div>

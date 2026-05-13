@@ -9,6 +9,7 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import Links from "./Links";
 import API from "../API";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Navbar = ({ toggleTheme, theme }) => {
   const navigate = useNavigate();
@@ -66,42 +67,70 @@ return (
           <button className="hidden lg:flex" onClick={() => navigate("/login")}>Login</button>
           <button className="hidden lg:flex" onClick={() => navigate("/register")}>Register</button>
         </div>
+<AnimatePresence>
+  {opening && (
+    <>
+      <motion.div
+        onClick={() => setOpening(false)}
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-10 hidden lg:block"
 
-        {opening && (
-          <>
-            <div
-              onClick={() => setOpening(false)}
-              className="fixed inset-0 bg-[rgba(0,0,0,0.5)] backdrop-blur-sm z-10 hidden lg:block"
-            />
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
 
-            <div className={`lg:flex hidden justify-between flex-col items-start p-10 fixed left-0 h-screen bg-black top-0 gap-5 overflow-y-auto  
-              transform transition-transform duration-700 ease-out w-[40%] z-20 ${opening ? "translate-x-0" : "translate-x-full"}`}>
+        transition={{ duration: 0.3 }}
+      />
+      <motion.div
+        className="lg:flex hidden flex-col items-start p-10 fixed left-0 h-screen bg-black top-0 gap-5 overflow-y-auto w-[40%] z-20"
 
-              <div className="flex justify-between items-center w-full">
-                <h1>Breaking News</h1>
-                <button onClick={() => setOpening(!opening)}>
-                  {opening ? <X size={28}/> : <Menu size={28}/>}
-                </button>
-              </div>
+        initial={{ x: "-100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "-100%" }}
 
-              <div className="grid grid-cols-2 gap-5 w-full">
-                {posts.map((post) => (
-                  <div key={post.id}>
-                    {post.image_url && (
-                      <div className="relative">
-                        <img src={post.image_url} className="w-full h-50 object-cover" />
-                        <div className='absolute bottom-0 w-full bg-black/70 text-center text-white py-3'>
-                          <small>By {post.name}</small>
-                        </div>
-                      </div>
-                    )}
+        transition={{
+          duration: 0.5,
+          ease: "easeInOut",
+        }}
+      >
+
+        {/* HEADER */}
+        <div className="flex justify-between items-center w-full">
+          <h1>Breaking News</h1>
+
+          <button onClick={() => setOpening(false)}>
+            <X size={28} />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-5 w-full">
+          {posts.map((post) => (
+            <motion.div
+              key={post.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className="relative"
+            >
+              {post.image_url && (
+                <>
+                  <img
+                    src={post.image_url}
+                    className="w-full h-50 object-cover"
+                  />
+
+                  <div className="absolute bottom-0 w-full bg-black/70 text-center text-white py-3">
+                    <small>By {post.name}</small>
                   </div>
-                ))}
-              </div>
+                </>
+              )}
+            </motion.div>
+          ))}
+        </div>
 
-            </div>
-          </>
-        )}
+      </motion.div>
+    </>
+  )}
+</AnimatePresence>
 
       </nav>
     )}

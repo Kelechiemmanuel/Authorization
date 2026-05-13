@@ -8,6 +8,7 @@ import API from '../API'
 import Login from '../pages/Login'
 import { Search, Menu, X } from 'lucide-react'
 import { useState, useEffect } from 'react'
+import { AnimatePresence, motion } from "framer-motion";
 
 const Links = () => {
   const navigate = useNavigate();
@@ -49,56 +50,79 @@ const Links = () => {
         </div>
       </div>
 
-      {open && (
-        <>
-          <div
-            onClick={() => setOpen(false)}
-            className="fixed inset-0 bg-[rgba(0,0,0,0.76)] backdrop-blur-sm z-10"
-          />
-          <ul className={`flex justify-between items-start p-10 fixed left-0 h-screen bg-black top-0 gap-5  transform transition-transform duration-700 ease-out overflow-y-auto
-        md:hidden w-[60%] z-20 ${open ? "translate-x-0" : "translate-x-full"}`}>
-            <div className='flex flex-col justify-center items-start gap-5 mt-10'>
-              <Link to="/" onClick={() => setOpen(false)}>Home</Link>
-              <Link to="/products" onClick={() => setOpen(false)}>Economy</Link>
-              <Link to="/designs" onClick={() => setOpen(false)}>Culture</Link>
-              <Link to="/development" onClick={() => setOpen(false)}>Politics</Link>
-              <Link to="/development" onClick={() => setOpen(false)}>Science</Link>
-              <Link to="/development" onClick={() => setOpen(false)}>Technology</Link>
-              <Link to="/development" onClick={() => setOpen(false)}>Travel</Link>
-              <Link to="/development" onClick={() => setOpen(false)}>World</Link>
-              <Link to="/development" onClick={() => setOpen(false)}>About</Link>
-              <Link to="/development" onClick={() => setOpen(false)}>Contact</Link>
-              <div className="flex gap-4 mt-4">
-                <button
-                  className="cursor-pointer"
-                  onClick={() => {
-                    navigate("/login");
-                    setOpen(false);
-                  }}
-                >
-                  Login
-                </button>
+<AnimatePresence>
+  {open && (
+    <>
+      {/* BACKDROP */}
+      <motion.div
+        onClick={() => setOpen(false)}
+        className="fixed inset-0 bg-black/76 backdrop-blur-sm z-10 md:hidden"
 
-                <button
-                  className="cursor-pointer"
-                  onClick={() => {
-                    navigate("/register");
-                    setOpen(false);
-                  }}
-                >
-                  Register
-                </button>
-              </div>
-            </div>
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
 
-            <div>
-              <button onClick={() => setOpen(!open)} className='md:hidden cursor-pointer'>
-                {open ? <X size={20} /> : <Menu size={20} />}
-              </button>
-            </div>
-          </ul>
-        </>
-      )}
+        transition={{ duration: 0.25 }}
+      />
+
+      {/* SIDEBAR */}
+      <motion.ul
+        className="flex justify-between items-start p-10 fixed left-0 h-screen bg-black top-0 gap-5 overflow-y-auto w-[60%] z-20 md:hidden"
+
+        initial={{ x: "-100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "-100%" }}
+
+        transition={{
+          duration: 0.5,
+          ease: "easeInOut",
+        }}
+      >
+        <div className="flex flex-col justify-center items-start gap-5 mt-10">
+
+          <Link to="/" onClick={() => setOpen(false)}>Home</Link>
+          <Link to="/products" onClick={() => setOpen(false)}>Economy</Link>
+          <Link to="/designs" onClick={() => setOpen(false)}>Culture</Link>
+          <Link to="/development" onClick={() => setOpen(false)}>Politics</Link>
+          <Link to="/development" onClick={() => setOpen(false)}>Science</Link>
+          <Link to="/development" onClick={() => setOpen(false)}>Technology</Link>
+          <Link to="/development" onClick={() => setOpen(false)}>Travel</Link>
+          <Link to="/development" onClick={() => setOpen(false)}>World</Link>
+          <Link to="/development" onClick={() => setOpen(false)}>About</Link>
+          <Link to="/development" onClick={() => setOpen(false)}>Contact</Link>
+
+          <div className="flex gap-4 mt-4">
+            <button
+              onClick={() => {
+                navigate("/login");
+                setOpen(false);
+              }}
+            >
+              Login
+            </button>
+
+            <button
+              onClick={() => {
+                navigate("/register");
+                setOpen(false);
+              }}
+            >
+              Register
+            </button>
+          </div>
+        </div>
+
+        {/* CLOSE BUTTON */}
+        <button
+          onClick={() => setOpen(false)}
+          className="md:hidden cursor-pointer text-white"
+        >
+          <X size={20} />
+        </button>
+      </motion.ul>
+    </>
+  )}
+</AnimatePresence>
     </nav>
   )
 }
