@@ -34,7 +34,7 @@ const Subscribe = () => {
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      viewport={{ once: false, amount: 0.2 }}
+      viewport={{ once: true, amount: 0.2 }}
       className="grid grid-cols-1 lg:grid-cols-2 gap-10 px-5 md:px-14 lg:px-40 my-16"
     >
       {/* LEFT INFO */}
