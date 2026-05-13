@@ -5,177 +5,95 @@ import API from "../API";
 const Subscribe = () => {
   const [email, setEmail] = useState("");
   const [msg, setMsg] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSubscribe = async () => {
+    if (!email) {
+      setMsg("Please enter an email");
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const res = await API.post("/subscriptions", { email });
 
-      setMsg(res.data.message);
-
+      setMsg(res.data.message || "Subscribed successfully");
       setEmail("");
-
     } catch (err) {
+      setMsg(err.response?.data?.error || "Subscription failed");
+    } finally {
+      setLoading(false);
 
-      setMsg(err.response?.data?.error || "Something went wrong");
+      setTimeout(() => setMsg(""), 3000);
     }
-
-    setTimeout(() => setMsg(""), 3000);
   };
 
   return (
-
     <motion.div
       initial={{ opacity: 0, y: 60 }}
-
       whileInView={{ opacity: 1, y: 0 }}
-
-      transition={{ duration: 0.7 }}
-
-      viewport={{ once: true, amount: 0.2 }}
-
-      className="
-        grid grid-cols-1 place-items-center
-        w-full gap-10 my-10 px-5
-        md:grid-cols-1 md:px-14
-        lg:grid-cols-2 lg:px-39
-      "
+      transition={{ duration: 0.6 }}
+      viewport={{ once: false, amount: 0.2 }}
+      className="grid grid-cols-1 lg:grid-cols-2 gap-10 px-5 md:px-14 lg:px-40 my-16"
     >
-
+      {/* LEFT INFO */}
       <motion.div
-        initial={{ opacity: 0, x: -80 }}
-
+        initial={{ opacity: 0, x: -40 }}
         whileInView={{ opacity: 1, x: 0 }}
-
-        transition={{
-          duration: 0.7,
-          delay: 0.1,
-        }}
-
-        viewport={{
-          once: false,
-          amount: 0.2,
-        }}
-
-        className='
-          border border-[#d9dcde]
-          text-[#1f2228]
-          p-10
-          rounded-sm
-          transition
-          bg-white
-        '
+        transition={{ duration: 0.6 }}
+        className="border border-[#d9dcde] p-8 rounded-lg bg-white shadow-sm"
       >
-
-        <h1 className="text-[13px] font-bold mb-3">
-          Stay Informed with Early Updates!
+        <h1 className="text-sm font-bold text-[#1f2228] mb-3">
+          Stay Informed
         </h1>
 
-        <p className='text-[14px] leading-8 text-[#5c6166]'>
-          Subscribe to our newsletter and receive the latest
-          theme updates and important news directly to your inbox.
+        <p className="text-sm leading-7 text-[#5c6166]">
+          Subscribe to receive updates, new articles, and important news directly in your inbox.
         </p>
-
       </motion.div>
 
       {/* RIGHT FORM */}
       <motion.div
-        initial={{ opacity: 0, x: 80 }}
-
+        initial={{ opacity: 0, x: 40 }}
         whileInView={{ opacity: 1, x: 0 }}
-
-        transition={{
-          duration: 0.7,
-          delay: 0.2,
-        }}
-
-        viewport={{
-          once: false,
-          amount: 0.2,
-        }}
-
-        className="w-full"
+        transition={{ duration: 0.6, delay: 0.1 }}
       >
+        <h3 className="text-lg font-semibold text-[#1f2228]">
+          Join our newsletter
+        </h3>
 
-        <motion.h3
-          initial={{ opacity: 0, y: 20 }}
-
-          whileInView={{ opacity: 1, y: 0 }}
-
-          transition={{ duration: 0.6 }}
-
-          viewport={{
-            once: false,
-            amount: 0.2,
-          }}
-
-          className="text-[#1f2228] font-bold text-xl"
-        >
-          Subscribe to our blog
-        </motion.h3>
-
-        <motion.div
-          whileFocus={{ scale: 1.01 }}
-
-          className="
-            flex border border-[#e3e5e6]
-            w-full p-2 rounded-sm
-            lg:pl-5 md:pl-5 pl-2
-            mt-5
-            bg-white
-          "
-        >
-
+        {/* INPUT BOX */}
+        <div className="flex items-center mt-5 border border-[#e3e5e6] rounded-md overflow-hidden bg-white shadow-sm">
           <input
             type="email"
-            placeholder="Enter email"
+            placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="
-              outline-0
-              flex-1
-              bg-transparent
-              text-[#1f2228]
-            "
+            className="flex-1 px-4 py-3 outline-none text-sm"
           />
 
           <motion.button
             onClick={handleSubscribe}
-
+            disabled={loading}
             whileTap={{ scale: 0.95 }}
-
-            whileHover={{
-              scale: 1.03,
-            }}
-
-            className="
-              px-5 py-3
-              bg-[#1f2228]
-              rounded-sm
-              text-[#d9dcde]
-              cursor-pointer
-            "
+            className="px-5 py-3 bg-[#1f2228] text-white text-sm hover:opacity-90 transition"
           >
-            Subscribe
+            {loading ? "..." : "Subscribe"}
           </motion.button>
+        </div>
 
-        </motion.div>
-
+        {/* MESSAGE */}
         {msg && (
-
           <motion.p
-            initial={{ opacity: 0, y: 10 }}
-
-            animate={{ opacity: 1, y: 0 }}
-
-            className="mt-4 text-sm text-[#1f2228]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="mt-3 text-sm text-[#1f2228]"
           >
             {msg}
           </motion.p>
-
         )}
-
       </motion.div>
-
     </motion.div>
   );
 };
