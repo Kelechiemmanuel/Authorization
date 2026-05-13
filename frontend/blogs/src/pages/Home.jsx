@@ -259,7 +259,7 @@ const Home = () => {
 
 
       </motion.div>
-      <WorldMap />
+      {/* <WorldMap /> */}
     </div>
   )
 }
