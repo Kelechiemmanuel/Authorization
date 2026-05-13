@@ -34,17 +34,16 @@ const Subscribe = () => {
       initial={{ opacity: 0, y: 60 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: false, amount: 0.3, margin: "-100px" }}
       className="grid grid-cols-1 lg:grid-cols-2 gap-10 px-5 md:px-14 lg:px-40 my-16"
     >
-      {/* LEFT INFO */}
       <motion.div
         initial={{ opacity: 0, x: -40 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6 }}
         className="border border-[#d9dcde] p-8 rounded-lg bg-white shadow-sm"
       >
-        <h1 className="text-sm font-bold text-[#1f2228] mb-3">
+        <h1 className="text-sm font-bold text-[#5c6166] mb-3">
           Stay Informed
         </h1>
 
@@ -53,7 +52,6 @@ const Subscribe = () => {
         </p>
       </motion.div>
 
-      {/* RIGHT FORM */}
       <motion.div
         initial={{ opacity: 0, x: 40 }}
         whileInView={{ opacity: 1, x: 0 }}
@@ -63,7 +61,6 @@ const Subscribe = () => {
           Join our newsletter
         </h3>
 
-        {/* INPUT BOX */}
         <div className="flex items-center mt-5 border border-[#e3e5e6] rounded-md overflow-hidden bg-white shadow-sm">
           <input
             type="email"
@@ -83,7 +80,6 @@ const Subscribe = () => {
           </motion.button>
         </div>
 
-        {/* MESSAGE */}
         {msg && (
           <motion.p
             initial={{ opacity: 0 }}
